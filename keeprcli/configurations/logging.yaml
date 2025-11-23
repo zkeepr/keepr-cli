@@ -1,0 +1,33 @@
+version: 1
+formatters:
+  simple:
+    format: '%(levelname)s - %(message)s'
+  detailed:
+    format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: simple
+    stream: ext://sys.stdout
+  file:
+    class: logging.FileHandler
+    level: WARNING
+    formatter: detailed
+    filename: keeprcli/cache/logs/app_diagnostics.log
+  debug_file:
+    class: logging.FileHandler
+    level: DEBUG
+    formatter: detailed
+    filename: keeprcli/cache/logs/debug.log
+
+loggers:
+  main:
+    level: INFO
+    handlers: [console, file, debug_file]
+    propagate: no
+
+root:
+  level: DEBUG
+  handlers: [console]
