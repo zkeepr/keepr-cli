@@ -21,6 +21,7 @@ logger = logging.getLogger('main')
 from __init__ import __version__
 from utils.pypixz_pro import install_modules, install_requirements
 from utils._os import os_compatibility
+from utils.environment import python_compatiblity
 
 try:
     import yaml
@@ -82,6 +83,10 @@ def technology_verification(args: argparse.Namespace, parser: argparse.Namespace
         'os': {
             'name': 'operating system',
             'function': lambda: os_compatibility()
+        },
+        'env': {
+            'name': 'environment',
+            'function': lambda: python_compatiblity()
         }
     }
     
