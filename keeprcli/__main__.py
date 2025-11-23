@@ -20,6 +20,7 @@ logger = logging.getLogger('main')
 
 from __init__ import __version__
 from utils.pypixz_pro import install_modules, install_requirements
+from utils._os import os_compatibility
 
 try:
     import yaml
@@ -47,6 +48,7 @@ def argparse_setup() -> argparse.Namespace:
     
     parser = argparse.ArgumentParser(description=f"Keepr-CLI - v{__version__}")
     parser.add_argument('-v', '--version', action='version', version=f"Keepr-CLI - v{__version__}")
+    parser.add_argument('--skip-check', nargs='+', choices=['os', 'env', 'pip', 'all'], help="pass the program launch checks")
     parser.add_argument('--debug', action='store_true', help="enable debug output")
     args = parser.parse_args()
     
@@ -75,6 +77,29 @@ def logging_setup(args: argparse.Namespace) -> logging.Logger:
     return logger
 
 
+def technology_verification(args: argparse.Namespace, parser: argparse.Namespace) -> bool:
+    technology = {
+        'os': {
+            'name': 'operating system',
+            'function': lambda: os_compatibility()
+        }
+    }
+    
+    skipped_checks = args.skip_check or []
+    if 'all' in skipped_checks:
+        if skipped_checks and (len(skipped_checks) > 1 or skipped_checks[0] != 'all'):
+            parser.error("The 'all' argument must be the first and only choice after '--skip-check'.")
+        return True
+    
+    for object, data in technology.items():
+        if object not in skipped_checks:
+            logger.debug(f"Running {data['name']} compatibility check...")
+            data['function']()
+        else:
+            logger.warning(f"Skipping {data['name']} compatibility check.")
+    return True
+
+
 def initialize() -> None:
     keepr_path_default = get_keepr_path()
     parser, args = argparse_setup()
@@ -84,7 +109,8 @@ def initialize() -> None:
         configuration_file = yaml.safe_load(file)
         dictConfig(configuration_file)
     
-    logger = logging_setup(args=args)
+    logger = logging_setup(args)
+    technology_verification(args, parser)
     
     return None
     
