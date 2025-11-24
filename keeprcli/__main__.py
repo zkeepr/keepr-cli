@@ -78,7 +78,7 @@ def logging_setup(args: argparse.Namespace) -> logging.Logger:
     return logger
 
 
-def technology_verification(args: argparse.Namespace, parser: argparse.Namespace) -> bool:
+def technology_verification(args: argparse.Namespace, parser: argparse.Namespace, requirement_path: str) -> bool:
     technology = {
         'os': {
             'name': 'operating system',
@@ -87,6 +87,10 @@ def technology_verification(args: argparse.Namespace, parser: argparse.Namespace
         'env': {
             'name': 'environment',
             'function': lambda: python_compatiblity()
+        },
+        'pip': {
+            'name': 'packages',
+            'function': lambda: install_requirements()
         }
     }
     
@@ -115,7 +119,8 @@ def initialize() -> None:
         dictConfig(configuration_file)
     
     logger = logging_setup(args)
-    technology_verification(args, parser)
+    requirements_path =  f"{keepr_path_default.parent}\\requirements.txt"
+    technology_verification(args, parser, requirements_path)
     
     return None
     
