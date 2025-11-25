@@ -109,7 +109,7 @@ def technology_verification(args: argparse.Namespace, parser: argparse.Namespace
     return True
 
 
-def initialize() -> None:
+def initialize() -> argparse.Namespace:
     keepr_path_default = get_keepr_path()
     parser, args = argparse_setup()
     
@@ -122,9 +122,12 @@ def initialize() -> None:
     requirements_path =  f"{keepr_path_default.parent}\\requirements.txt"
     technology_verification(args, parser, requirements_path)
     
-    return None
+    return args
     
 
 if __name__ == '__main__':
-    initialize()
+    args = initialize()
+    
+    from core.keeprcli import KeeprCLI
+    KeeprCLI(args)
     
