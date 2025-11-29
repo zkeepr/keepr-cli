@@ -5,13 +5,13 @@ import calendar
 import platform
 
 from __init__ import __version__
-from utils.miscellaneous import clear_screen
+from common.miscellaneous import clear_screen
 
 current_time = datetime.datetime.now()
 
 
 class KeeprCLI:
-    def __init__(self, args):
+    def __init__(self, parameters):
         self.version = __version__
         self.ftime = {
             'year': current_time.year,
@@ -21,12 +21,13 @@ class KeeprCLI:
             'minute': current_time.minute,
             'second': current_time.second
         }
-        self.args = args
+        self.args = parameters[2]
         self.os = platform.system()
-        
+
         clear_screen()
-        
+
         print(f"Keepr-CLI v{self.version} ({self.ftime['month']} {self.ftime['day']} {self.ftime['year']}, {self.ftime['hour']}:{self.ftime['minute']}:"
-              f"{self.ftime['second']}){" [DEBUG]" if args.debug else ""} on {self.os}\n"
+              f"{self.ftime['second']}){" [DEBUG]" if self.args.debug else ""} on {self.os}\n"
               "Type \"help\", \"credits\", \"copyright\", \"license\" for more information.")
+
         
