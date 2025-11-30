@@ -9,4 +9,4 @@ secure way. The project is developed primarily in Python.
 This version of Keepr is command line only.
 """
 
-__version__ = '1.0'
+__version__ = '1.0.0'
