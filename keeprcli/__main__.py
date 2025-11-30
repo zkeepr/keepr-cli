@@ -21,7 +21,7 @@ logger = logging.getLogger('main')
 
 from __init__ import __version__
 from common.pypixz import install_package, install_requirements, PackageInstallationError
-from common._os import os_compatibility
+from common._os import os_compatibility, get_os_name
 from common.environment import python_compatiblity
 
 try:
@@ -150,9 +150,11 @@ def initialize() -> list[Path | ArgumentParser | Namespace]:
     
     return [keepr_path_default, parser, args]
 
+
 if __name__ == '__main__':
     parameters = initialize()
-    
-    from runtime.keeprcli import KeeprCLI
-    KeeprCLI(parameters)
+    os_name = get_os_name()
+
+    from core import KeeprApp
+    KeeprApp(__version__, os_name, parameters)
     
