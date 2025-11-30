@@ -7,7 +7,7 @@ import logging
 logger = logging.getLogger("main")
 
 
-def get_os_name():
+def get_os_name() -> str:
     return platform.system()
 
 
