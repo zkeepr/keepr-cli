@@ -7,6 +7,10 @@ import logging
 logger = logging.getLogger("main")
 
 
+def get_os_name():
+    return platform.system()
+
+
 def parse_version(version: str) -> tuple:
     return tuple(map(int, re.findall(r"\d+", version)))  # '10.0.19044' -> (10, 0, 19044)
 
@@ -27,7 +31,7 @@ def os_compatibility() -> None:
     :rtype: None
     """
 
-    os_name = platform.system()
+    os_name = get_os_name()
     os_release = platform.release()
     os_version = extract_kernel_version(os_release) if os_name == "Linux" else platform.version()
 
